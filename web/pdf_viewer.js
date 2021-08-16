@@ -3402,6 +3402,33 @@ class PDFFindController {
     });
   }
 
+  _goToMatch(pageIdx) {
+    const matches = this._pageMatches
+    .flatMap((pm, i) => {
+        if (pm.length) {
+            return pm.map((x, j) => ({
+                pageIndex: i,
+                matchIndex: j,
+                matchLocation: x
+            }));
+        }
+
+        return [];
+    })
+
+    const match = matches.find(x=>x.pageIndex === pageIdx )
+
+    this._selected.pageIdx = match.pageIndex;
+    this._selected.matchIdx = match.matchIndex;
+    this._linkService.page = match.pageIndex + 1
+
+    this._eventBus.dispatch("updatetextlayermatches", {
+        source: this,
+        pageIndex: match.pageIndex
+      });
+
+  }
+
   _nextMatch() {
     const previous = this._state.findPrevious;
     const currentPageIndex = this._linkService.page - 1;
