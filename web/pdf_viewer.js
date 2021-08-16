@@ -3418,6 +3418,10 @@ class PDFFindController {
 
     const match = matches.find(x=>x.pageIndex === pageIdx )
 
+    if (!match) {
+        return
+    }
+
     this._selected.pageIdx = match.pageIndex;
     this._selected.matchIdx = match.matchIndex;
     this._linkService.page = match.pageIndex + 1
@@ -3427,6 +3431,12 @@ class PDFFindController {
         pageIndex: match.pageIndex
       });
 
+      this._updateUIResultsCount();
+      this._updateUIState();
+
+      this._offset =  { pageIdx: match.pageIndex, matchIdx: match.matchIndex, wrapped: false }
+    
+    return matches.findIndex(x=>x.pageIndex === pageIdx )
   }
 
   _nextMatch() {
